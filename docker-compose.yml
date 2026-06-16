@@ -1,0 +1,49 @@
+services:
+  # The Database
+  db:
+    image: postgres:15
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    
+  # Redis - JWT refresh-token blocklist now, Celery broker later
+  redis:
+    image: redis:7-alpine
+
+  # The Django Backend
+  backend:
+    build: ./django_finance
+    volumes:
+      - ./django_finance:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - DB_HOST=db  # This matches the 'db' service name above!
+      - DB_NAME=${POSTGRES_DB}
+      - DB_USER=${POSTGRES_USER}
+      - DB_PASSWORD=${POSTGRES_PASSWORD}
+      - DB_PORT=5432
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    env_file:
+      - ./django_finance/.env
+    depends_on:
+      - db
+      - redis
+    
+  # The React Frontend
+  frontend:
+    build: ./frontend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules  # This prevents local node_modules from overwriting the container's
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
