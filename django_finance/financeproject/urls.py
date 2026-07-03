@@ -16,8 +16,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from finances.views import CookieTokenObtainPairView, CookieTokenRefreshView, LogoutView, RegisterView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('finances/', include('finances.urls')),
+    path('auth/register/', RegisterView.as_view(), name='register'),
+    path('auth/login/', CookieTokenObtainPairView.as_view(), name='login'),
+    path('auth/refresh/', CookieTokenRefreshView.as_view(), name='refresh'),
+    path('auth/logout/', LogoutView.as_view(), name='logout'),
 ]
