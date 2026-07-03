@@ -32,8 +32,9 @@ This document is a curated collection of resources to help you master the techno
 
 ## 🐳 Phase 4: DevOps & Deployment
 
-### Containerization
+### Containerization & CI/CD
 - **[Docker Curriculum](https://docker-curriculum.com/):** Hands-on tutorial for Docker and Docker Compose.
+- **[GitHub Actions Documentation](https://docs.github.com/en/actions):** The official guide to automating your development workflow.
 - **[TestDriven.io - Dockerizing Django/React](https://testdriven.io/blog/dockerizing-django-with-postgres-gunicorn-and-nginx/):** A specific guide that mirrors our project's architecture.
 
 ### Engineering Standards

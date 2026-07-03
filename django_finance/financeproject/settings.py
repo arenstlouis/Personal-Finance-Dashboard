@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
+from datetime import timedelta
 from pathlib import Path
 import os
 from dotenv import load_dotenv
@@ -135,3 +136,22 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
 ]
+# Refresh token travels as an httpOnly cookie, so the browser must be
+# allowed to send/receive credentials on cross-origin requests.
+CORS_ALLOW_CREDENTIALS = True
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
+
+SIMPLE_JWT = {
+    # Short-lived: this is the token kept in memory on the frontend.
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
+    # Long-lived: this is the token kept in the httpOnly cookie.
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+}
+
+REDIS_HOST = os.getenv('REDIS_HOST', 'localhost')
+REDIS_PORT = int(os.getenv('REDIS_PORT', 6379))
